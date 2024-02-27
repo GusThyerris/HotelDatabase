@@ -50,3 +50,33 @@ fk_id_reserva int not null,
 foreign key (fk_id_cliente) references cliente(id) ,
 foreign key (fk_id_reserva) references reserva(id)
 );
+
+-- 1 Fazer uma consulta mostrando todas as reservas de um funcionario. Deve mostrar: idreserva, quarto, nomefuncionario 
+select r.id as idreserva, q.numero as quarto, f.nome as nomefuncionario
+from reserva as r
+join funcionario as f on r.idfuncionario = f.id
+join quarto as q on r.fk_id_quarto = q.id
+where f.id = [ID_DO_FUNCIONARIO];
+
+-- 2 Fazer uma consulta mostrando todas as reservas de um cliente. Deve mostrar: idreserva, quarto, nomecliente
+select r.id as idreserva, q.numero as quarto, c.nome as nomecliente
+from reserva as r
+join cliente as c on r.idcliente = c.id
+join quarto as q on r.fk_id_quarto = q.id
+where c.id = [ID_DO_CLIENTE];
+
+-- 3 Fazer uma consulta mostrando todas as reservas da situação pago. Deve mostrar: idreserva, quarto, nomefuncionario, nomecliente e situação
+select r.id as idreserva, q.numero as quarto, f.nome as nomefuncionario, c.nome as nomecliente, 'pago' as situacao
+from reserva as r
+join funcionario as f on r.idfuncionario = f.id
+join cliente as c on r.idcliente = c.id
+join quarto as q on r.fk_id_quarto = q.id
+where r.id in (select fk_id_reserva from reserva_cliente);
+
+-- 4 Fazer uma consulta mostrando todas as reservas da situação pendente. Deve mostrar: idreserva, quarto, nomefuncionario, nomecliente e situação
+select r.id as idreserva, q.numero as quarto, f.nome as nomefuncionario, c.nome as nomecliente, 'pendente' as situacao
+from reserva as r
+join funcionario as f on r.idfuncionario = f.id
+join cliente as c on r.idcliente = c.id
+join quarto as q on r.fk_id_quarto = q.id
+where r.id not in (select fk_id_reserva from reserva_cliente);
